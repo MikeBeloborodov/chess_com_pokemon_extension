@@ -1,10 +1,3 @@
-class WrongWebsiteError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'WrongWebsiteError';
-  }
-}
-
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -12,7 +5,6 @@ function sleep(ms) {
 async function wait_for_component() {
   let chat;
   for (let i = 0; i < 10; i++) {
-    console.log("waiting");
     await sleep(1000);
     try {
       // find chat
@@ -28,15 +20,12 @@ async function wait_for_component() {
 
 function set_zen_mode(chat_component) {
   try {
-    if (!document.URL.includes("chess.com"))
-      throw new WrongWebsiteError("This website is not chess.com");
-
     // create zen mode modal to hide chat
     const zen_modal = document.createElement('div');
 
     // add some styles
     chat_component.style.position = 'relative';
-    zen_modal.style.backgroundColor = 'black';
+    zen_modal.style.backgroundColor = 'rgb(48, 46, 43)';
     zen_modal.style.inset = 0;
     zen_modal.style.inlineSize = '100%';
     zen_modal.style.blockSize = '100%';
@@ -51,8 +40,10 @@ function set_zen_mode(chat_component) {
 }
 
 async function main() {
+  if (!document.URL.includes("chess.com"))
+    return;
   const chat_component = await wait_for_component();
   set_zen_mode(chat_component);
 }
 
-main()
+main();
