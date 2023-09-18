@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Chess.com zen mode",
+  "description": "Hides chat in the game.",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["main.js"]
+    }
+  ]
+}
