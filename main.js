@@ -1,5 +1,11 @@
-const textChangeEvent = new Event("textChange")
+// Events
+const textChangeEvent = new Event("textChange");
 
+// Selectors
+const chatRoomComponentSelector = '.chat-room-component';
+const usernameComponentSelector = '.user-tagline-username';
+
+// Functions
 function observeElementChange(selector, event) {
   return new Promise(resolve => {
     const observer = new MutationObserver(mutations => {
@@ -49,10 +55,10 @@ function createZenModal() {
   return zenModal;
 }
 
-function createReturnChatButton() {
+function createReturnChatButton(zenModal) {
   const chatButton = document.createElement('button');
   chatButton.style.backgroundColor = 'rgb(255 255 255 / 0.08)';
-  chatButton.style.fontFamily = 'Segoe UI';
+  chatButton.style.fontFamily = 'Segoe UI, sans-serif';
   chatButton.style.color = 'rgb(255 255 255 / 0.72)';
   chatButton.style.position = 'relative';
   chatButton.style.zIndex = 3;
@@ -62,13 +68,23 @@ function createReturnChatButton() {
   chatButton.style.fontSize = '15px';
   chatButton.style.padding = '9px 12px'
   chatButton.style.borderRadius = '5px';
+  chatButton.style.cursor = 'pointer';
+  chatButton.addEventListener('click', (event) => {
+    zenModal.remove();
+  });
+  chatButton.addEventListener('mouseover', (event) => {
+    chatButton.style.backgroundColor = 'rgb(255 255 255 / 0.16)';
+  });
+  chatButton.addEventListener('mouseleave', (event) => {
+    chatButton.style.backgroundColor = 'rgb(255 255 255 / 0.08)';
+  });
   return chatButton;
 }
 
 function applyZenMode(component) {
   try {
     const zenModal = createZenModal();
-    const returnChatButton = createReturnChatButton();
+    const returnChatButton = createReturnChatButton(zenModal);
     component.style.position = 'relative';
     zenModal.appendChild(returnChatButton);
     component.appendChild(zenModal);
@@ -81,15 +97,16 @@ async function main() {
   if (!document.URL.includes("chess.com"))
     return;
 
-  const chatComponent = await waitForElement('.chat-room-component');
+  const chatComponent = await waitForElement(chatRoomComponentSelector);
   applyZenMode(chatComponent);
-  const opponentNameComponent = await waitForElement('.user-tagline-username');
-  observeElementChange('.user-tagline-username', textChangeEvent);
+  const opponentNameComponent = await waitForElement(usernameComponentSelector);
+  observeElementChange(usernameComponentSelector, textChangeEvent);
   opponentNameComponent.addEventListener("textChange", async () => {
-    const chatComponent = await waitForElement('.chat-room-component');
+    const chatComponent = await waitForElement(chatRoomComponentSelector);
     applyZenMode(chatComponent);
-    observeElementChange('.user-tagline-username', textChangeEvent);
+    observeElementChange(usernameComponentSelector, textChangeEvent);
   })
 }
 
+// Entry point
 main();
