@@ -1,39 +1,56 @@
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+const textChangeEvent = new Event("textChange")
+
+function observeElementChange(selector, event) {
+  return new Promise(resolve => {
+    const observer = new MutationObserver(mutations => {
+      document.querySelector(selector).dispatchEvent(event);
+      observer.disconnect();
+      return resolve();
+    })
+    observer.observe(document.querySelector(selector), {
+      childList: true,
+      subtree: true,
+      attributes: true,
+    });
+  })
 }
 
-async function wait_for_component() {
-  let chat;
-  for (let i = 0; i < 10; i++) {
-    await sleep(1000);
-    try {
-      // find chat
-      chat = document.getElementsByClassName("chat-room-component")[0];
-    } catch (error) {
-      console.log(error);
-    }
-  }
+function waitForElement(selector) {
   return new Promise(resolve => {
-    resolve(chat);
+    if (document.querySelector(selector)) {
+      return resolve(document.querySelector(selector));
+    }
+
+    const observer = new MutationObserver(mutations => {
+      if (document.querySelector(selector)) {
+        observer.disconnect();
+        resolve(document.querySelector(selector));
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
   });
 }
 
-function set_zen_mode(chat_component) {
+function applyZenMode(component) {
   try {
     // create zen mode modal to hide chat
-    const zen_modal = document.createElement('div');
+    const zenModal = document.createElement('div');
 
     // add some styles
-    chat_component.style.position = 'relative';
-    zen_modal.style.backgroundColor = 'rgb(48, 46, 43)';
-    zen_modal.style.inset = 0;
-    zen_modal.style.inlineSize = '100%';
-    zen_modal.style.blockSize = '100%';
-    zen_modal.style.position = 'absolute';
-    zen_modal.style.zIndex = 2;
+    component.style.position = 'relative';
+    zenModal.style.backgroundColor = 'rgb(48, 46, 43)';
+    zenModal.style.inset = 0;
+    zenModal.style.inlineSize = '100%';
+    zenModal.style.blockSize = '100%';
+    zenModal.style.position = 'absolute';
+    zenModal.style.zIndex = 2;
 
     // append modal
-    chat_component.appendChild(zen_modal);
+    component.appendChild(zenModal);
   } catch (error) {
     console.log(error);
   }
@@ -42,8 +59,16 @@ function set_zen_mode(chat_component) {
 async function main() {
   if (!document.URL.includes("chess.com"))
     return;
-  const chat_component = await wait_for_component();
-  set_zen_mode(chat_component);
+
+  const chatComponent = await waitForElement('.chat-room-component');
+  applyZenMode(chatComponent);
+  const opponentNameComponent = await waitForElement('.user-tagline-username');
+  observeElementChange('.user-tagline-username', textChangeEvent);
+  opponentNameComponent.addEventListener("textChange", async () => {
+    const chatComponent = await waitForElement('.chat-room-component');
+    applyZenMode(chatComponent);
+    observeElementChange('.user-tagline-username', textChangeEvent);
+  })
 }
 
 main();
