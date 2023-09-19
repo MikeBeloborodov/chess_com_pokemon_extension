@@ -7,7 +7,7 @@ https://github.com/MikeBeloborodov/chess_com_zen_mode_addon
 - [Author](#author)
 
 ## About
-This addon extension hides chat component during the game on [chess.com](chess.com).
+This extension hides chat component during the game on [chess.com](chess.com).
 
 ## Installation
 
@@ -16,7 +16,7 @@ This addon extension hides chat component during the game on [chess.com](chess.c
 - Open Google Chrome -> Extensions
 - Toggle "Developer mode" in the right corner
 - Press "Load unpacked" button and choose the folder with extracted extension
-- Press OK
+- Press OK<br />
 ![](./install_screenshot.avif)
 
 ## Screenshot
