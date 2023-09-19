@@ -35,21 +35,42 @@ function waitForElement(selector) {
   });
 }
 
+function createZenModal() {
+  const zenModal = document.createElement('div');
+  zenModal.style.backgroundColor = 'rgb(48, 46, 43)';
+  zenModal.style.inset = 0;
+  zenModal.style.inlineSize = '100%';
+  zenModal.style.blockSize = '100%';
+  zenModal.style.position = 'absolute';
+  zenModal.style.zIndex = 2;
+  zenModal.style.display = 'flex';
+  zenModal.style.alignItems = 'center';
+  zenModal.style.justifyContent = 'center';
+  return zenModal;
+}
+
+function createReturnChatButton() {
+  const chatButton = document.createElement('button');
+  chatButton.style.backgroundColor = 'rgb(255 255 255 / 0.08)';
+  chatButton.style.fontFamily = 'Segoe UI';
+  chatButton.style.color = 'rgb(255 255 255 / 0.72)';
+  chatButton.style.position = 'relative';
+  chatButton.style.zIndex = 3;
+  chatButton.innerText = 'Show chat';
+  chatButton.style.border = 'none';
+  chatButton.style.fontWeight = 'bold';
+  chatButton.style.fontSize = '15px';
+  chatButton.style.padding = '9px 12px'
+  chatButton.style.borderRadius = '5px';
+  return chatButton;
+}
+
 function applyZenMode(component) {
   try {
-    // create zen mode modal to hide chat
-    const zenModal = document.createElement('div');
-
-    // add some styles
+    const zenModal = createZenModal();
+    const returnChatButton = createReturnChatButton();
     component.style.position = 'relative';
-    zenModal.style.backgroundColor = 'rgb(48, 46, 43)';
-    zenModal.style.inset = 0;
-    zenModal.style.inlineSize = '100%';
-    zenModal.style.blockSize = '100%';
-    zenModal.style.position = 'absolute';
-    zenModal.style.zIndex = 2;
-
-    // append modal
+    zenModal.appendChild(returnChatButton);
     component.appendChild(zenModal);
   } catch (error) {
     console.log(error);
