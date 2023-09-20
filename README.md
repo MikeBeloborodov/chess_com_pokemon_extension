@@ -22,6 +22,7 @@ This extension hides chat component during the game on [chess.com](chess.com).
 ## Screenshot
 
 ![](./screenshot.webp)
+![](./hide_chat_screenshot.webp)
 
 ## Author
 

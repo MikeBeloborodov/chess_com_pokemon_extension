@@ -4,6 +4,7 @@ const textChangeEvent = new Event("textChange");
 // Selectors
 const chatRoomComponentSelector = '.chat-room-component';
 const usernameComponentSelector = '.user-tagline-username';
+const chatInputComponentSelector = '.chat-input-chat-wrapper';
 
 // Functions
 function observeElementChange(selector, event) {
@@ -81,16 +82,45 @@ function createReturnChatButton(zenModal) {
   return chatButton;
 }
 
-function applyZenMode(component) {
-  try {
-    const zenModal = createZenModal();
-    const returnChatButton = createReturnChatButton(zenModal);
-    component.style.position = 'relative';
-    zenModal.appendChild(returnChatButton);
-    component.appendChild(zenModal);
-  } catch (error) {
-    console.log(error);
-  }
+function createHideChatButton(chatComponent) {
+  const hideChatButton = document.createElement('button');
+  hideChatButton.style.backgroundColor = 'rgb(255 255 255 / 0.08)';
+  hideChatButton.style.fontFamily = 'Segoe UI, sans-serif';
+  hideChatButton.style.color = 'rgb(255 255 255 / 0.72)';
+  hideChatButton.style.position = 'absolute';
+  hideChatButton.style.insetInlineEnd = '35px';
+  hideChatButton.style.insetBlockStart = '10px';
+  hideChatButton.style.zIndex = 2;
+  hideChatButton.innerText = 'Hide chat';
+  hideChatButton.style.border = 'none';
+  hideChatButton.style.fontWeight = 'bold';
+  hideChatButton.style.fontSize = '10px';
+  hideChatButton.style.borderRadius = '5px';
+  hideChatButton.style.cursor = 'pointer';
+  hideChatButton.addEventListener('mouseover', (event) => {
+    hideChatButton.style.backgroundColor = 'rgb(255 255 255 / 0.16)';
+  });
+  hideChatButton.addEventListener('mouseleave', (event) => {
+    hideChatButton.style.backgroundColor = 'rgb(255 255 255 / 0.08)';
+  });
+  hideChatButton.addEventListener('click', (event) => {
+    applyZenMode(chatComponent)
+  })
+  return hideChatButton;
+}
+
+function addHideChatButton(chatComponent) {
+  const chatInput = document.querySelector(chatInputComponentSelector);
+  const hideChatButton = createHideChatButton(chatComponent);
+  chatInput.appendChild(hideChatButton);
+}
+
+function applyZenMode(chatComponent) {
+  const zenModal = createZenModal();
+  const returnChatButton = createReturnChatButton(zenModal);
+  chatComponent.style.position = 'relative';
+  zenModal.appendChild(returnChatButton);
+  chatComponent.appendChild(zenModal);
 }
 
 async function main() {
@@ -99,6 +129,7 @@ async function main() {
 
   const chatComponent = await waitForElement(chatRoomComponentSelector);
   applyZenMode(chatComponent);
+  addHideChatButton(chatComponent);
   const opponentNameComponent = await waitForElement(usernameComponentSelector);
   observeElementChange(usernameComponentSelector, textChangeEvent);
   opponentNameComponent.addEventListener("textChange", async () => {
