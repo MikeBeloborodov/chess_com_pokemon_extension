@@ -8,6 +8,7 @@ https://github.com/MikeBeloborodov/chess_com_zen_mode_addon
 
 ## About
 This extension hides chat component during the game on [chess.com](chess.com).
+Thanks to the github user [duiker101](https://github.com/duiker101) for pokemon SVG icons.
 
 ## Installation
 

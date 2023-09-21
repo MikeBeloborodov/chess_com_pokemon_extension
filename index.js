@@ -5,7 +5,7 @@ const textChangeEvent = new Event("textChange");
 const chatRoomComponentSelector = ".chat-room-component";
 const usernameComponentSelector = ".player-top .user-tagline-username";
 const chatInputComponentSelector = ".chat-input-chat-wrapper";
-const userAvatarSelector = '.player-avatar img';
+const userAvatarSelector = ".player-avatar img";
 const sidebarComponentSelector = ".sidebar-component";
 
 // Pokemon API base URL
@@ -152,8 +152,9 @@ async function applyPokemonMode() {
         if (addedNodes[0] != "Opponent") {
           username.innerText = pokeData.name;
           username.style.textTransform = "capitalize";
-          document.querySelector('.player-avatar img').src = pokeData.sprites.front_default;
-          document.querySelector('.player-avatar img').style.scale = 1.8;
+          document.querySelector(".player-avatar img").src =
+            pokeData.sprites.front_default;
+          document.querySelector(".player-avatar img").style.scale = 1.8;
           observer.disconnect();
         }
     }
@@ -165,19 +166,22 @@ async function applyPokemonMode() {
   });
 }
 
-async function main() {
+async function applyChanges() {
   const pokeMode = await applyPokemonMode();
   const chatComponent = await waitForElement(chatRoomComponentSelector);
   applyZenMode(chatComponent);
   addHideChatButton(chatComponent);
+}
+
+async function main() {
+  applyChanges();
+
+  // monitors opponent name change to check for the new game
   const opponentNameComponent = await waitForElement(usernameComponentSelector);
-  observeElementChange(usernameComponentSelector, textChangeEvent);
   opponentNameComponent.addEventListener("textChange", async () => {
-    const chatComponent = await waitForElement(chatRoomComponentSelector);
-    applyZenMode(chatComponent);
-    addHideChatButton(chatComponent);
-    observeElementChange(usernameComponentSelector, textChangeEvent);
+    applyChanges();
   });
+  observeElementChange(usernameComponentSelector, textChangeEvent);
 }
 // Entry point
 main();
