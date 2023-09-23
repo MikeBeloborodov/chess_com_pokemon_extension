@@ -319,9 +319,9 @@ const transformFlag = async(pokeData) => {
     typeImg.style.boxShadow = `0 0 5px 0 ${pokemonTypes[type].color}`
     typeImg.style.padding = "3px";
     typeImg.style.borderRadius = "50%";
-    typeImg.style.marginRight = '5px';
-    typeImg.style.marginLeft = '5px';
     typeImg.src = chrome.runtime.getURL(`icons/${type}.svg`);
+    flagComponent.style.marginRight = '5px';
+    flagComponent.style.marginLeft = '5px';
     flagComponent.style.position = 'relative';
     const userTaglineComponent = document.querySelector(userTaglineComponentSelector);
     userTaglineComponent.style.marginTop = "5px";
