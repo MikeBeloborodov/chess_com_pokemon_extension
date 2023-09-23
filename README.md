@@ -1,5 +1,5 @@
-https://github.com/MikeBeloborodov/chess_com_zen_mode_addon
-# Chess.com zen mode extension for Google Chrome
+https://github.com/MikeBeloborodov/chess_com_pokemon_extension
+# Chess.com Pokemon extension
 
 - [About](#about)
 - [Installation](#installation)
@@ -7,8 +7,9 @@ https://github.com/MikeBeloborodov/chess_com_zen_mode_addon
 - [Author](#author)
 
 ## About
-This extension hides chat component during the game on [chess.com](chess.com).
-Thanks to the github user [duiker101](https://github.com/duiker101) for pokemon SVG icons.
+This extension changes opponent name, avatar and country during the game on [chess.com](chess.com) to a pokemon from PokeAPI.
+It also hides chat to let you concentrate more on the game.
+Thanks to the github user [duiker101](https://github.com/duiker101) for Pokemon SVG icons.
 
 ## Installation
 
@@ -17,12 +18,13 @@ Thanks to the github user [duiker101](https://github.com/duiker101) for pokemon 
 - Open Google Chrome -> Extensions
 - Toggle "Developer mode" in the right corner
 - Press "Load unpacked" button and choose the folder with extracted extension
-- Press OK<br />
+- Press OK<br /><br />
 ![](./install_screenshot.avif)
 
 ## Screenshot
 
-![](./screenshot.webp)
+![](./screenshot_pokemon.png)
+![](./screenshot_chat_hidden.png)
 ![](./hide_chat_screenshot.webp)
 
 ## Author

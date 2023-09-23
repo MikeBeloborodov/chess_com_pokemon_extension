@@ -5,9 +5,79 @@ const chatRoomComponentSelector = ".chat-room-component";
 const chatInputComponentSelector = ".chat-input-chat-wrapper";
 const chatInputGuestSelector = '.chat-input-guest';
 const playerTopComponentSelector = '.player-top';
+const countryFlagsComponentSelector = '.country-flags-component';
+const userTaglineComponentSelector = '.user-tagline-component';
 
 // Pokemon API base URL
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/";
+
+// Pokemon type colors
+const pokemonTypes = {
+  dragon:{
+    type: 'dragon',
+    color: '#0C69C8'
+  },
+  electric:{
+    type: 'electric',
+    color: '#F2D94E'
+  },
+  fire:{
+    type: 'fire',
+    color: '#FBA54C'
+  },
+  fairy:{
+    type: 'fairy',
+    color: '#EE90E6'
+  },
+  fighting:{
+    type: 'fighting',
+    color: '#D3425F'
+  },
+  flying:{
+    type: 'flying',
+    color: '#A1BBEC'
+  },
+  ghost:{
+    type: 'ghost',
+    color: '#5F6DBC'
+  },
+  grass:{
+    type: 'grass',
+    color: '#5FBD58'
+  },
+  ground:{
+    type: 'ground',
+    color: '#DA7C4D'
+  },
+  ice:{
+    type: 'ice',
+    color: '#75D0C1'
+  },
+  normal:{
+    type: 'normal',
+    color: '#A0A29F'
+  },
+  poison:{
+    type: 'poison',
+    color: '#B763CF'
+  },
+  psychic:{
+    type: 'psychic',
+    color: '#FA8581'
+  },
+  rock:{
+    type: 'rock',
+    color: '#C9BB8A'
+  },
+  steel:{
+    type: 'steel',
+    color: '#5695A3'
+  },
+  water:{
+    type: 'water',
+    color: '#539DDF'
+  }
+}
 
 // uses mutation observer to look for an element
 const waitForElement = async (selector) => {
@@ -198,7 +268,7 @@ const transformAvatar = (pokeData) => {
   return new Promise(resolve => {
     // remove old changes
     if (document.querySelector('.pokemon-avatar-background')){
-      console.log(document.querySelector('.pokemon-avatar-background'));
+      document.querySelector('.pokemon-avatar-background').remove()
     } 
     if (document.querySelector('.pokemon-avatar-image')) {
       document.querySelector('.pokemon-avatar-image').remove();
@@ -220,7 +290,7 @@ const transformAvatar = (pokeData) => {
     newAvatar.style.blockSize = "42px";
     newAvatar.style.border = 'none';
     newAvatar.style.zIndex = 3;
-    newAvatar.style.scale = 1.9;
+    newAvatar.style.scale = 1.5;
     newAvatar.style.insetInlineStart = '-4px;'
     newAvatar.src = pokeData.sprites.front_default;
     playerTopComponent.style.position = "relative";
@@ -230,11 +300,42 @@ const transformAvatar = (pokeData) => {
   })
 }
 
+const transformFlag = async(pokeData) => {
+  return new Promise(resolve => {
+    // check for old type image
+    if (document.querySelector('.pokemon-type-img'))
+      document.querySelector('.pokemon-type-img').remove()
+
+    const flagComponent = document.querySelector(countryFlagsComponentSelector);
+    console.log(pokeData.types[0].type.name);
+    const type = pokeData.types[0].type.name
+    flagComponent.style.backgroundImage = `none`;
+    const typeImg = document.createElement('img');
+    typeImg.classList.add('pokemon-type-img');
+    typeImg.style.position = 'absolute';
+    typeImg.style.inlineSize = '20px';
+    typeImg.style.blockSize = '20px';
+    typeImg.style.backgroundColor = pokemonTypes[type].color;
+    typeImg.style.boxShadow = `0 0 5px 0 ${pokemonTypes[type].color}`
+    typeImg.style.padding = "3px";
+    typeImg.style.borderRadius = "50%";
+    typeImg.style.marginRight = '5px';
+    typeImg.src = chrome.runtime.getURL(`icons/${type}.svg`);
+    flagComponent.style.position = 'relative';
+    const userTaglineComponent = document.querySelector(userTaglineComponentSelector);
+    userTaglineComponent.style.marginTop = "5px";
+    const usernameComponent = document.querySelector(usernameComponentSelector);
+    usernameComponent.style.marginRight = '5px';
+    flagComponent.appendChild(typeImg);
+    resolve();
+  })
+}
 
 const applyPokemonMode = async(pokeData) => {
   return new Promise(async(resolve) => {
     transformUsername(pokeData)
       .then((res) => transformAvatar(pokeData))
+      .then((res) => transformFlag(pokeData))
       .then((res) => resolve())
   })
 }
