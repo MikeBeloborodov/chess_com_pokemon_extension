@@ -7,6 +7,8 @@ const usernameComponentSelector = ".player-top .user-tagline-username";
 const chatInputComponentSelector = ".chat-input-chat-wrapper";
 const userAvatarSelector = ".player-avatar img";
 const sidebarComponentSelector = ".sidebar-component";
+const boardComponentSelector = '.board';
+const playerTopComponentSelector = '.player-top';
 
 // Pokemon API base URL
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/";
@@ -15,6 +17,7 @@ const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/";
 function observeElementChange(selector, event) {
   return new Promise((resolve) => {
     const observer = new MutationObserver((mutations) => {
+      console.log("change! from observer");
       document.querySelector(selector).dispatchEvent(event);
       observer.disconnect();
       return resolve();
@@ -135,7 +138,7 @@ async function getPokemonData(pokemonID) {
 }
 
 async function getRandomPokemon() {
-  // 0 - 900 (gen VIII pokemon)
+  // Gen I (1 - 151 pokemon)
   const random_id = Math.floor(Math.random() * 152);
   const pokeData = await getPokemonData(random_id);
   return pokeData;
@@ -150,11 +153,30 @@ async function applyPokemonMode() {
       const addedNodes = mutationsList[mutation].addedNodes;
       if (addedNodes.length > 0)
         if (addedNodes[0] != "Opponent") {
+          // name change
           username.innerText = pokeData.name;
           username.style.textTransform = "capitalize";
-          document.querySelector(".player-avatar img").src =
-            pokeData.sprites.front_default;
-          document.querySelector(".player-avatar img").style.scale = 1.8;
+          // picture change
+          const playerTopComponent = document.querySelector(playerTopComponentSelector);
+          const avatarBackground = document.createElement("div");
+          avatarBackground.style.position = "absolute";
+          avatarBackground.style.backgroundColor = "rgb(48, 46, 43)";
+          avatarBackground.style.inlineSize = "48px";
+          avatarBackground.style.blockSize = "42px";
+          avatarBackground.style.insetInlineStart = '-5px'
+          avatarBackground.style.zIndex = 2;
+          const newAvatar = document.createElement("img");
+          newAvatar.style.position = "absolute";
+          newAvatar.style.inlineSize = "44px";
+          newAvatar.style.blockSize = "42px";
+          newAvatar.style.border = 'none';
+          newAvatar.style.zIndex = 3;
+          newAvatar.style.scale = 1.9;
+          newAvatar.style.insetInlineStart = '-4px;'
+          newAvatar.src = pokeData.sprites.front_default;
+          playerTopComponent.style.position = "relative";
+          playerTopComponent.appendChild(avatarBackground);
+          playerTopComponent.appendChild(newAvatar);
           observer.disconnect();
         }
     }
@@ -166,20 +188,21 @@ async function applyPokemonMode() {
   });
 }
 
-async function applyChanges() {
+async function main() {
+  const board = await waitForElement(boardComponentSelector);
   const pokeMode = await applyPokemonMode();
   const chatComponent = await waitForElement(chatRoomComponentSelector);
   applyZenMode(chatComponent);
   addHideChatButton(chatComponent);
-}
 
-async function main() {
-  applyChanges();
-
-  // monitors opponent name change to check for the new game
   const opponentNameComponent = await waitForElement(usernameComponentSelector);
   opponentNameComponent.addEventListener("textChange", async () => {
-    applyChanges();
+    console.log("text change");
+    const pokeMode = await applyPokemonMode();
+    const chatComponent = await waitForElement(chatRoomComponentSelector);
+    applyZenMode(chatComponent);
+    addHideChatButton(chatComponent);
+    observeElementChange(usernameComponentSelector, textChangeEvent);
   });
   observeElementChange(usernameComponentSelector, textChangeEvent);
 }
