@@ -13,6 +13,14 @@ const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/";
 
 // Pokemon type colors
 const pokemonTypes = {
+  bug: {
+    type: 'bug',
+    color: '#92BC2C'
+  },
+  dark: {
+    type: 'dark',
+    color: '#595761'
+  },
   dragon:{
     type: 'dragon',
     color: '#0C69C8'
