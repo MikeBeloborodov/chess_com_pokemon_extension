@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.chess.com/*"],
-      "js": ["rework.js"]
+      "js": ["index.js"]
     }
   ],
    "icons": {
