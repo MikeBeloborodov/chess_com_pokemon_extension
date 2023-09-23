@@ -34,7 +34,7 @@ const waitForOpponent = async (usernameComponent) => {
     let prevGame = "";
     const defaultOpponentUsername = usernameComponent.innerText;
     return resolve(() => {
-      const re = new RegExp("https:\/\/www\.chess\.com\/?(live)?\/[0-9]*$");
+      const re = new RegExp("https:\/\/www\.chess\.com\/?(game)?\/?(live)?\/[0-9]*$");
       return new Promise((resolve) => {
         if (
           (re.test(document.URL)) && 
