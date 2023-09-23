@@ -172,7 +172,7 @@ const createReturnChatButton = (chatModal) => {
   return returnChatButton;
 };
 
-// creates 'hide chat' button
+// creates a 'hide chat' button
 // it takes the 'close chat' function as a parameter
 const createHideChatButton = (fn) => {
   const hideChatButton = document.createElement("button");
@@ -320,12 +320,13 @@ const transformFlag = async(pokeData) => {
     typeImg.style.padding = "3px";
     typeImg.style.borderRadius = "50%";
     typeImg.style.marginRight = '5px';
+    typeImg.style.marginLeft = '5px';
     typeImg.src = chrome.runtime.getURL(`icons/${type}.svg`);
     flagComponent.style.position = 'relative';
     const userTaglineComponent = document.querySelector(userTaglineComponentSelector);
     userTaglineComponent.style.marginTop = "5px";
     const usernameComponent = document.querySelector(usernameComponentSelector);
-    usernameComponent.style.marginRight = '5px';
+    usernameComponent.style.marginLeft = '5px';
     flagComponent.appendChild(typeImg);
     resolve();
   })

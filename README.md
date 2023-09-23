@@ -3,7 +3,7 @@ https://github.com/MikeBeloborodov/chess_com_pokemon_extension
 
 - [About](#about)
 - [Installation](#installation)
-- [Screenshot](#screenshot)
+- [Screenshots](#screenshots)
 - [Author](#author)
 
 ## About
@@ -21,7 +21,7 @@ Thanks to the github user [duiker101](https://github.com/duiker101) for Pokemon 
 - Press OK<br /><br />
 ![](./install_screenshot.avif)
 
-## Screenshot
+## Screenshots
 
 ![](./screenshot_pokemon.png)<br />
 ![](./screenshot_chat_hidden.png)<br />
