@@ -315,7 +315,7 @@ const transformAvatar = (pokeData) => {
 
     // 1 in 10 random shiny
     // TODO: sparkling effect?
-    const randomShiny = Math.floor(Math.random() * 10);
+    const randomShiny = 5;
     if (randomShiny === 5) {
       newAvatar.src = pokeData.sprites.front_shiny;
       const shinyTag = document.createElement('p');
@@ -325,7 +325,11 @@ const transformAvatar = (pokeData) => {
       shinyTag.style.letterSpacing = '1.5px';
       shinyTag.style.position = 'absolute';
       shinyTag.style.zIndex = 3;
-      shinyTag.style.insetInlineStart = '-30px';
+      if (document.querySelector(grudgeScoreComponentSelector)) {
+        shinyTag.style.insetInlineStart = '10px;'
+      } else {
+        shinyTag.style.insetInlineStart = '-30px';
+      }
       shinyTag.style.insetBlockStart = '-5px';
       shinyTag.style.rotate = '313deg';
       shinyTag.style.color = '#FFF';
