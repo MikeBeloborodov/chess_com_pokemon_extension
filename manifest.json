@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.chess.com/*"],
-      "js": ["index.js"]
+      "js": ["content.js"]
     }
   ],
    "icons": {
@@ -17,7 +17,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [ "icons/*" ],
+      "resources": [ "icons/*", "fonts/*" ],
       "matches": ["https://www.chess.com/*"]
     }
   ]

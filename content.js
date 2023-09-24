@@ -7,6 +7,7 @@ const chatInputGuestSelector = '.chat-input-guest';
 const playerTopComponentSelector = '.player-top';
 const countryFlagsComponentSelector = '.country-flags-component';
 const userTaglineComponentSelector = '.user-tagline-component';
+const grudgeScoreComponentSelector = '.grudge-score-component';
 
 // Pokemon API base URL
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/";
@@ -85,7 +86,7 @@ const pokemonTypes = {
     type: 'water',
     color: '#539DDF'
   }
-}
+};
 
 // uses mutation observer to look for an element
 const waitForElement = async (selector) => {
@@ -132,7 +133,7 @@ const waitForOpponent = async (usernameComponent) => {
             return resolve();
           }
         });
-        observer.observe(document.body, {childList: true, subtree: true})
+        observer.observe(document.body, {childList: true, subtree: true});
       });
     });
   });
@@ -223,8 +224,8 @@ const closeChat = async () => {
     if (chatInputComponent) {
       chatInputComponent.appendChild(hideChatButton);
     } else {
-      const chatInputGuestComponent = document.querySelector(chatInputGuestSelector)
-      chatInputGuestComponent.append(hideChatButton)
+      const chatInputGuestComponent = document.querySelector(chatInputGuestSelector);
+      chatInputGuestComponent.append(hideChatButton);
     }
     chatComponent.appendChild(chatModal);
     chatModal.appendChild(returnChatButton);
@@ -287,23 +288,55 @@ const transformAvatar = (pokeData) => {
     avatarBackground.classList.add('pokemon-avatar-background');
     avatarBackground.style.position = "absolute";
     avatarBackground.style.backgroundColor = "rgb(48, 46, 43)";
-    avatarBackground.style.inlineSize = "48px";
+    avatarBackground.style.inlineSize = "50px";
     avatarBackground.style.blockSize = "42px";
-    avatarBackground.style.insetInlineStart = '-5px'
+    avatarBackground.style.insetInlineStart = '-6px'
     avatarBackground.style.zIndex = 2;
     const newAvatar = document.createElement("img");
     newAvatar.classList.add('pokemon-avatar-image');
-    newAvatar.style.position = "absolute";
+    newAvatar.style.position = "relative";
     newAvatar.style.inlineSize = "44px";
     newAvatar.style.blockSize = "42px";
     newAvatar.style.border = 'none';
     newAvatar.style.zIndex = 3;
-    newAvatar.style.scale = 1.5;
-    newAvatar.style.insetInlineStart = '-4px;'
-    newAvatar.src = pokeData.sprites.front_default;
+    if (pokeData.height < 10) {
+      newAvatar.style.scale = 2;
+    } else if (pokeData.height >= 10) {
+      newAvatar.style.scale = 1.5; 
+    }
+    newAvatar.style.insetInlineStart = '6px';
+
+    if (document.querySelector(grudgeScoreComponentSelector)) {
+      newAvatar.style.insetInlineStart = '-4px;'
+      avatarBackground.style.insetInlineStart = '40px';
+    } else {
+      avatarBackground.style.insetInlineStart = 0;
+    }
+
+    // 1 in 10 random shiny
+    // TODO: sparkling effect?
+    const randomShiny = Math.floor(Math.random() * 10);
+    if (randomShiny === 5) {
+      newAvatar.src = pokeData.sprites.front_shiny;
+      const shinyTag = document.createElement('p');
+      shinyTag.innerText = 'Shiny!'
+      shinyTag.style.fontFamily = 'Pokemon Solid';
+      shinyTag.style.fontSize = '10px';
+      shinyTag.style.letterSpacing = '1.5px';
+      shinyTag.style.position = 'absolute';
+      shinyTag.style.zIndex = 3;
+      shinyTag.style.insetInlineStart = '-30px';
+      shinyTag.style.insetBlockStart = '-5px';
+      shinyTag.style.rotate = '313deg';
+      shinyTag.style.color = '#FFF';
+      avatarBackground.appendChild(shinyTag);
+    } else {
+      newAvatar.src = pokeData.sprites.front_default;
+    }
+
     playerTopComponent.style.position = "relative";
+    avatarBackground.appendChild(newAvatar);
     playerTopComponent.appendChild(avatarBackground);
-    playerTopComponent.appendChild(newAvatar);
     resolve();
   })
 }
@@ -312,10 +345,9 @@ const transformFlag = async(pokeData) => {
   return new Promise(resolve => {
     // check for old type image
     if (document.querySelector('.pokemon-type-img'))
-      document.querySelector('.pokemon-type-img').remove()
+      document.querySelector('.pokemon-type-img').remove();
 
     const flagComponent = document.querySelector(countryFlagsComponentSelector);
-    console.log(pokeData.types[0].type.name);
     const type = pokeData.types[0].type.name
     flagComponent.style.backgroundImage = `none`;
     const typeImg = document.createElement('img');
@@ -345,8 +377,16 @@ const applyPokemonMode = async(pokeData) => {
     transformUsername(pokeData)
       .then((res) => transformAvatar(pokeData))
       .then((res) => transformFlag(pokeData))
-      .then((res) => resolve())
-  })
+      .then((res) => resolve());
+  });
+}
+
+const injectFonts = async() => {
+  return new Promise(resolve => {
+    let font = new FontFace("Pokemon Solid", `url(${chrome.runtime.getURL('fonts/Pokemon_Solid.ttf')})`);
+    document.fonts.add(font);
+    resolve();
+  });
 }
 
 // this recursive function waits for a new match, applies changes and then fires itself again
@@ -364,9 +404,10 @@ const newMatch = async(opponentWaiter) => {
 // we wait until user starts a new game and a game board appears
 const main = async () => {
   waitForElement(boardComponentSelector)
+  .then((res) => injectFonts())
   .then((res) => waitForElement(usernameComponentSelector))
   .then((usernameComponent) => waitForOpponent(usernameComponent))
-  .then((opponentWaiter) => newMatch(opponentWaiter))
+  .then((opponentWaiter) => newMatch(opponentWaiter));
 };
 
 // Entry point
