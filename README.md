@@ -24,9 +24,9 @@ Thanks to the github user [duiker101](https://github.com/duiker101) for Pokemon 
 ## Screenshots
 
 ![](./screenshot_pokemon.png)<br />
+![](./screenshot_shiny.jpg)<br />
 ![](./screenshot_chat_hidden.png)<br />
-![](./hide_chat_screenshot.webp)<br />
-![](./screenshot_shiny.jpg)
+![](./hide_chat_screenshot.webp)
 
 ## Author
 
