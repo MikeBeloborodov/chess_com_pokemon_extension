@@ -111,6 +111,7 @@ const waitForElement = async (selector) => {
 const waitForOpponent = async (usernameComponent) => {
   return new Promise((resolve) => {
     let prevGame = "";
+    let prevOpponent = "";
     const defaultOpponentUsername = usernameComponent.innerText;
     return resolve(() => {
       const re = new RegExp("https:\/\/www\.chess\.com\/?(game)?\/?(live)?\/[0-9]*$");
@@ -313,9 +314,9 @@ const transformAvatar = (pokeData) => {
       avatarBackground.style.insetInlineStart = 0;
     }
 
-    // 1 in 10 random shiny
+    // 1 in 20 random shiny
     // TODO: sparkling effect?
-    const randomShiny = 5;
+    const randomShiny = Math.floor(Math.random() * 20);
     if (randomShiny === 5) {
       newAvatar.src = pokeData.sprites.front_shiny;
       const shinyTag = document.createElement('p');
@@ -326,7 +327,7 @@ const transformAvatar = (pokeData) => {
       shinyTag.style.position = 'absolute';
       shinyTag.style.zIndex = 3;
       if (document.querySelector(grudgeScoreComponentSelector)) {
-        shinyTag.style.insetInlineStart = '10px;'
+        shinyTag.style.insetInlineStart = '-68px;'
       } else {
         shinyTag.style.insetInlineStart = '-30px';
       }
