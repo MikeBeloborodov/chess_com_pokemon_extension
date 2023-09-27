@@ -264,4 +264,5 @@ class PokemonExtension {
   }
 }
 
+// entry point
 PokemonExtension.start();
