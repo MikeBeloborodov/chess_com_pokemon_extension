@@ -9,6 +9,7 @@ const countryFlagsComponentSelector = '.country-flags-component';
 const userTaglineComponentSelector = '.user-tagline-component';
 const grudgeScoreComponentSelector = '.grudge-score-component';
 
+
 // Pokemon API base URL
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/";
 
